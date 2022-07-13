@@ -10,6 +10,10 @@ inputs:
     description: "Override the default version of ckipp01/mill-github-dependency-graph plugin that is used internally."
     required: false
     default: ''
+  token:
+    description: "GitHub Personal Access Token (PAT). Defaults to PAT provided by your Action runner."
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'node16'
   main: 'dist/index.js'
