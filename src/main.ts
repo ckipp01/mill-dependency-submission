@@ -47,6 +47,7 @@ async function run(): Promise<void> {
     await exec.exec(
       millCommand,
       [
+        '--no-server',
         '--import',
         `ivy:io.chris-kipp::mill-github-dependency-graph::${pluginVersion}`,
         'io.kipp.mill.github.dependency.graph.Graph/submit'
