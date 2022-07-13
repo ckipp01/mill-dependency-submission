@@ -81,6 +81,7 @@ function run() {
                 ? defaultMillPluginVersion
                 : pluginVersionInput;
             yield exec.exec(millCommand, [
+                '--no-server',
                 '--import',
                 `ivy:io.chris-kipp::mill-github-dependency-graph::${pluginVersion}`,
                 'io.kipp.mill.github.dependency.graph.Graph/submit'
