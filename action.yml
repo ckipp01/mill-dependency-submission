@@ -1,11 +1,15 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Mill Dependency Submission'
+description: 'Submits your Mill build dependency graph to the GitHub Dependency Submission API.'
+author: 'Chris Kipp'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  working-directory:
+    description: "The relative path of the working directory of your build (where your .mill-version and build.sc are)."
+    required: false
+    default: ''
+  plugin-version:
+    description: "Override the default version of ckipp01/mill-github-dependency-graph plugin that is used internally."
+    required: false
+    default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -1,39 +1,37 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "mill-dependency-submission",
+  "version": "0.1.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Submit your Mill dependency graph to GitHub.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
-    "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run build && npm run format && npm run package && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/ckipp01/mill-dependency-submission.git"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "mill",
+    "scala",
+    "java",
+    "dependency-graph"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Chris Kipp",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/exec": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^16.10.5",
-    "@typescript-eslint/parser": "^5.8.1",
     "@vercel/ncc": "^0.31.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-github": "^4.3.2",
-    "eslint-plugin-jest": "^25.3.2",
     "jest": "^27.2.5",
     "js-yaml": "^4.1.0",
     "prettier": "2.5.1",
