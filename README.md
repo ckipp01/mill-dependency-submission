@@ -45,7 +45,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    - uses: ckipp01/mill-dependency-submission@v1.0.1
+    - uses: ckipp01/mill-dependency-submission@v1
 ```
 
 You can also just run the following command from the root of your workspace
@@ -60,13 +60,13 @@ curl -o .github/workflows/github-dependency-graph.yml --create-dirs https://raw.
 ### - `working-directory` (optional)
 
 The relative path of the working directory of your build (where your
-.mill-version and build.sc are). This defaults to ".".
+.mill-version and build.sc are). This defaults to `.`.
 
 ### - `plugin-version` (optional)
 
 Override the default version of
 [ckipp01/mill-github-dependency-graph](https://github.com/ckipp01/mill-github-dependency-graph)
-plugin that is used internally."
+plugin that is used internally.
 
 ## Troubleshooting
 
