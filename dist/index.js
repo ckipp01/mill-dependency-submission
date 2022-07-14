@@ -39,34 +39,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const mill_1 = __nccwpck_require__(638);
 const core = __importStar(__nccwpck_require__(186));
-const path = __importStar(__nccwpck_require__(17));
-const fs = __importStar(__nccwpck_require__(147));
 const exec = __importStar(__nccwpck_require__(514));
 const defaultMillPluginVersion = '0.1.0';
-const defaultMillVersion = '0.10.5';
-function getMillPath(root) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const millPath = path.join(root, 'mill');
-        const millWPath = path.join(root, 'millw');
-        if (fs.existsSync(millPath)) {
-            return './mill';
-        }
-        else if (fs.existsSync(millWPath)) {
-            return './millw';
-        }
-        else {
-            core.info('Installing mill...');
-            yield exec.exec('curl', [
-                '-sLo',
-                millPath,
-                `https://github.com/com-lihaoyi/mill/releases/download/${defaultMillVersion}/${defaultMillVersion}`
-            ]);
-            yield exec.exec('chmod', ['+x', millPath]);
-            return './mill';
-        }
-    });
-}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -76,7 +52,7 @@ function run() {
             const workingDirectoryInput = core.getInput('working-directory');
             const workingDirectory = workingDirectoryInput.length === 0 ? '.' : workingDirectoryInput;
             const pluginVersionInput = core.getInput('plugin-version');
-            const millCommand = yield getMillPath(workingDirectory);
+            const millCommand = yield (0, mill_1.getMillPath)(workingDirectory);
             const pluginVersion = pluginVersionInput.length === 0
                 ? defaultMillPluginVersion
                 : pluginVersionInput;
@@ -104,7 +80,7 @@ run();
 
 /***/ }),
 
-/***/ 351:
+/***/ 241:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -238,7 +214,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
-const command_1 = __nccwpck_require__(351);
+const command_1 = __nccwpck_require__(241);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(278);
 const os = __importStar(__nccwpck_require__(37));
@@ -1223,7 +1199,7 @@ const os = __importStar(__nccwpck_require__(37));
 const events = __importStar(__nccwpck_require__(361));
 const child = __importStar(__nccwpck_require__(81));
 const path = __importStar(__nccwpck_require__(17));
-const io = __importStar(__nccwpck_require__(436));
+const io = __importStar(__nccwpck_require__(351));
 const ioUtil = __importStar(__nccwpck_require__(962));
 const timers_1 = __nccwpck_require__(512);
 /* eslint-disable @typescript-eslint/unbound-method */
@@ -2761,7 +2737,7 @@ exports.getCmdPath = getCmdPath;
 
 /***/ }),
 
-/***/ 436:
+/***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -3385,6 +3361,78 @@ if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
   debug = function() {};
 }
 exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 638:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getMillPath = void 0;
+const path = __importStar(__nccwpck_require__(17));
+const fs = __importStar(__nccwpck_require__(147));
+const exec = __importStar(__nccwpck_require__(514));
+const core = __importStar(__nccwpck_require__(186));
+const defaultMillVersion = '0.10.5';
+function getMillPath(root) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const millPath = path.join(root, 'mill');
+        const millWPath = path.join(root, 'millw');
+        if (fs.existsSync(millPath)) {
+            return './mill';
+        }
+        else if (fs.existsSync(millWPath)) {
+            return './millw';
+        }
+        else {
+            core.info('Installing mill...');
+            yield exec.exec('curl', [
+                '--create-dirs',
+                '-sLo',
+                millPath,
+                `https://github.com/com-lihaoyi/mill/releases/download/${defaultMillVersion}/${defaultMillVersion}`
+            ]);
+            yield exec.exec('chmod', ['+x', millPath]);
+            return './mill';
+        }
+    });
+}
+exports.getMillPath = getMillPath;
 
 
 /***/ }),
