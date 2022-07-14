@@ -6,6 +6,8 @@ import * as exec from '@actions/exec'
 describe('mill', () => {
   const millPath = '__tests__/examples/missing/mill'
 
+  jest.setTimeout(20000) // 20 seconds for CI for the curl stuff
+
   // NOTE: That the path is relative to the root of the workspace for the tests
   it('should be able to recognize an existing mill file', async () => {
     const result = await getMillPath('__tests__/examples/mill')
@@ -18,7 +20,6 @@ describe('mill', () => {
   })
 
   it('should be able to download latest mill if none is found', async () => {
-    jest.setTimeout(10000) // 10 seconds for CI
     const result = await getMillPath('__tests__/examples/missing')
     const exists = fs.existsSync(millPath)
     const runResult = await exec.exec(millPath, ['--version'])
