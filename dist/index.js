@@ -52,6 +52,9 @@ function run() {
             const workingDirectoryInput = core.getInput('working-directory');
             const workingDirectory = workingDirectoryInput.length === 0 ? '.' : workingDirectoryInput;
             const pluginVersionInput = core.getInput('plugin-version');
+            if (!(0, mill_1.checkForValidMillVersion)(workingDirectory)) {
+                throw 'Invalid mill version exception.';
+            }
             const millCommand = yield (0, mill_1.getMillPath)(workingDirectory);
             const pluginVersion = pluginVersionInput.length === 0
                 ? defaultMillPluginVersion
@@ -4057,7 +4060,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getMillPath = void 0;
+exports.checkForValidMillVersion = exports.getMillPath = void 0;
 const path = __importStar(__nccwpck_require__(17));
 const fs = __importStar(__nccwpck_require__(147));
 const exec = __importStar(__nccwpck_require__(514));
@@ -4087,6 +4090,50 @@ function getMillPath(root) {
     });
 }
 exports.getMillPath = getMillPath;
+function checkForValidMillVersion(root) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const millVersionFile = path.join(root, '.mill-version');
+        const millFile = path.join(root, 'mill');
+        const millwFile = path.join(root, 'millw');
+        if (fs.existsSync(millVersionFile)) {
+            const data = fs.readFileSync(millVersionFile, 'utf8');
+            return validateVersion(data);
+        }
+        else if (fs.existsSync(millFile)) {
+            return checkMillFile(millFile);
+        }
+        else if (fs.existsSync(millwFile)) {
+            return checkMillFile(millwFile);
+        }
+        else {
+            core.info(`No .mill-version or mill file found so defaulting to ${defaultMillVersion}`);
+            return true;
+        }
+    });
+}
+exports.checkForValidMillVersion = checkForValidMillVersion;
+function checkMillFile(millFile) {
+    const data = fs.readFileSync(millFile, 'utf8');
+    const lines = data.split('\n');
+    const versionLine = lines.find(line => line.startsWith('DEFAULT_MILL_VERSION'));
+    if (versionLine) {
+        const version = versionLine.substring(versionLine.indexOf('=') + 1, versionLine.length);
+        return validateVersion(version);
+    }
+    else {
+        core.error('Invalid mill file found without a DEFAULT_MILL_VERSION');
+        return false;
+    }
+}
+function validateVersion(version) {
+    if (version.trim().startsWith('0.10')) {
+        return true;
+    }
+    else {
+        core.error(`Unsupported Mill version found: "${version}". Try updating to ${defaultMillVersion} and try again.`);
+        return false;
+    }
+}
 
 
 /***/ }),

@@ -1,4 +1,4 @@
-import {getMillPath} from '../src/mill'
+import {checkForValidMillVersion, getMillPath} from '../src/mill'
 import {expect} from '@jest/globals'
 import * as fs from 'fs'
 import * as exec from '@actions/exec'
@@ -26,6 +26,30 @@ describe('mill', () => {
     expect(result).toBe('./mill')
     expect(exists).toBe(true)
     expect(runResult).toBe(0)
+  })
+
+  it('should be able to recognize a valid version from a mill file', async () => {
+    const result = await checkForValidMillVersion('__tests__/examples/mill')
+    expect(result).toBe(true)
+  })
+
+  it('should be able to recognize a valid version from a millw file', async () => {
+    const result = await checkForValidMillVersion('__tests__/examples/millw')
+    expect(result).toBe(true)
+  })
+
+  it('should be able to recognize a valid version from a .mill-version file', async () => {
+    const result = await checkForValidMillVersion(
+      '__tests__/examples/mill-version'
+    )
+    expect(result).toBe(true)
+  })
+
+  it('should be able to detect a version that is too old', async () => {
+    const result = await checkForValidMillVersion(
+      '__tests__/examples/old-version'
+    )
+    expect(result).toBe(false)
   })
 
   afterAll(() => {
