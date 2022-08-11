@@ -1,5 +1,5 @@
-import { getMillPath } from '../src/mill'
-import { expect } from '@jest/globals'
+import {getMillPath} from '../src/mill'
+import {expect} from '@jest/globals'
 import * as fs from 'fs'
 import * as exec from '@actions/exec'
 
