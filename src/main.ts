@@ -1,4 +1,4 @@
-import {getMillPath} from '../src/mill'
+import {checkForValidMillVersion, getMillPath} from '../src/mill'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
@@ -15,6 +15,10 @@ async function run(): Promise<void> {
       workingDirectoryInput.length === 0 ? '.' : workingDirectoryInput
 
     const pluginVersionInput = core.getInput('plugin-version')
+
+    if (!checkForValidMillVersion(workingDirectory)) {
+      throw 'Invalid mill version exception.'
+    }
 
     const millCommand = await getMillPath(workingDirectory)
 
