@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
-const defaultMillVersion = '0.10.5'
+const defaultMillVersion = '0.10.11'
 
 export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
   const millPath = path.join(root, 'mill')
