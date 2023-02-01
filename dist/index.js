@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const mill_1 = __nccwpck_require__(638);
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
-const defaultMillPluginVersion = '0.2.0';
+const defaultMillPluginVersion = '0.2.1';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -4080,7 +4080,7 @@ const path = __importStar(__nccwpck_require__(17));
 const fs = __importStar(__nccwpck_require__(147));
 const exec = __importStar(__nccwpck_require__(514));
 const core = __importStar(__nccwpck_require__(186));
-const defaultMillVersion = '0.10.5';
+const defaultMillVersion = '0.10.11';
 function getMillPath(root) {
     return __awaiter(this, void 0, void 0, function* () {
         const millPath = path.join(root, 'mill');
