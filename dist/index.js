@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const mill_1 = __nccwpck_require__(638);
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
-const defaultMillPluginVersion = '0.2.1';
+const defaultMillPluginVersion = '0.2.3';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
