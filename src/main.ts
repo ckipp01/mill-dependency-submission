@@ -16,7 +16,7 @@ async function run(): Promise<void> {
 
     const pluginVersionInput = core.getInput('plugin-version')
 
-    checkForValidMillVersion(workingDirectory)
+    await checkForValidMillVersion(workingDirectory)
 
     const millCommand = await getMillPath(workingDirectory)
 
