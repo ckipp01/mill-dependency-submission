@@ -33,7 +33,7 @@ export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
  */
 export async function checkForValidMillVersion(root: string): Promise<string | undefined> {
   const millVersionFile = path.join(root, '.mill-version')
-  const configMillVersionFile = path.join(root, '.config', '.mill-version')
+  const configMillVersionFile = path.join(root, '.config', 'mill-version')
   const millFile = path.join(root, 'mill')
   const millwFile = path.join(root, 'millw')
 
