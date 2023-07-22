@@ -1,16 +1,17 @@
 import * as path from 'path'
 import * as fs from 'fs'
+import { exists, readFile } from './promisified'
 import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
-const defaultMillVersion = '0.10.11'
+const defaultMillVersion = '0.11.1'
 
 export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
   const millPath = path.join(root, 'mill')
   const millWPath = path.join(root, 'millw')
-  if (fs.existsSync(millPath)) {
+  if (await exists(millPath)) {
     return './mill'
-  } else if (fs.existsSync(millWPath)) {
+  } else if (await exists(millWPath)) {
     return './millw'
   } else {
     core.info('Installing mill...')
@@ -25,28 +26,37 @@ export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
   }
 }
 
-export async function checkForValidMillVersion(root: string): Promise<boolean> {
+/**
+ * Given a directory returns a promise which resolves to the Mill version declared in the
+ * project, or undefined if there is no declared version.
+ * The promise is rejected if the version is not supported or if any error happens.
+ */
+export async function checkForValidMillVersion(root: string): Promise<string | undefined> {
   const millVersionFile = path.join(root, '.mill-version')
+  const configMillVersionFile = path.join(root, '.config', '.mill-version')
   const millFile = path.join(root, 'mill')
   const millwFile = path.join(root, 'millw')
 
-  if (fs.existsSync(millVersionFile)) {
-    const data = fs.readFileSync(millVersionFile, 'utf8')
-    return validateVersion(data)
-  } else if (fs.existsSync(millFile)) {
-    return checkMillFile(millFile)
-  } else if (fs.existsSync(millwFile)) {
-    return checkMillFile(millwFile)
+  if (await exists(millVersionFile)) {
+    const data = await readFile(millVersionFile, 'utf8')
+    return validatedVersion(data)
+  } else if (await exists(configMillVersionFile)) {
+    const data = await readFile(configMillVersionFile, 'utf8')
+    return validatedVersion(data)
+  } else if (await exists(millFile)) {
+    return millFileVersion(millFile)
+  } else if (await exists(millwFile)) {
+    return millFileVersion(millwFile)
   } else {
     core.info(
       `No .mill-version or mill file found so defaulting to ${defaultMillVersion}`
     )
-    return true
+    return undefined
   }
 }
 
-function checkMillFile(millFile: string): boolean {
-  const data = fs.readFileSync(millFile, 'utf8')
+async function millFileVersion(millFile: string): Promise<string> {
+  const data = await readFile(millFile, 'utf8')
   const lines = data.split('\n')
   const versionLine = lines.find(line =>
     line.startsWith('DEFAULT_MILL_VERSION')
@@ -56,20 +66,17 @@ function checkMillFile(millFile: string): boolean {
       versionLine.indexOf('=') + 1,
       versionLine.length
     )
-    return validateVersion(version)
+    return validatedVersion(version)
   } else {
-    core.error('Invalid mill file found without a DEFAULT_MILL_VERSION')
-    return false
+    throw 'Invalid mill file found without a DEFAULT_MILL_VERSION'
   }
 }
 
-function validateVersion(version: String): boolean {
-  if (version.trim().startsWith('0.10')) {
-    return true
+function validatedVersion(version: String): string {
+  const trimmedVersion = version.trim()
+  if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+    return trimmedVersion
   } else {
-    core.error(
-      `Unsupported Mill version found: "${version}". Try updating to ${defaultMillVersion} and try again.`
-    )
-    return false
+    throw `Unsupported Mill version found: "${trimmedVersion}". Try updating to ${defaultMillVersion} and try again.`
   }
 }
