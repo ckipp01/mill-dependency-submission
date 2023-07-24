@@ -1,6 +1,6 @@
-import { checkForValidMillVersion, getMillPath } from '../src/mill'
-import { exists, readFile, rm } from '../src/promisified'
-import { expect } from '@jest/globals'
+import {checkForValidMillVersion, getMillPath} from '../src/mill'
+import {exists, readFile, rm} from '../src/promisified'
+import {expect} from '@jest/globals'
 import * as fs from 'fs'
 import * as exec from '@actions/exec'
 
@@ -57,9 +57,9 @@ describe('mill', () => {
     const resultPromise = checkForValidMillVersion(
       '__tests__/examples/old-version'
     )
-    expect(resultPromise)
-      .rejects
-      .toBe('Unsupported Mill version found: "0.9.0". Try updating to 0.11.1 and try again.')
+    expect(resultPromise).rejects.toBe(
+      'Unsupported Mill version found: "0.9.0". Try updating to 0.11.1 and try again.'
+    )
   })
 
   afterAll(() => {

@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { exists, readFile } from './promisified'
+import {exists, readFile} from './promisified'
 import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
@@ -31,7 +31,9 @@ export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
  * project, or undefined if there is no declared version.
  * The promise is rejected if the version is not supported or if any error happens.
  */
-export async function checkForValidMillVersion(root: string): Promise<string | undefined> {
+export async function checkForValidMillVersion(
+  root: string
+): Promise<string | undefined> {
   const millVersionFile = path.join(root, '.mill-version')
   const configMillVersionFile = path.join(root, '.config', 'mill-version')
   const millFile = path.join(root, 'mill')

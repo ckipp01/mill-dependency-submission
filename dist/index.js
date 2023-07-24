@@ -52,9 +52,7 @@ function run() {
             const workingDirectoryInput = core.getInput('working-directory');
             const workingDirectory = workingDirectoryInput.length === 0 ? '.' : workingDirectoryInput;
             const pluginVersionInput = core.getInput('plugin-version');
-            if (!(0, mill_1.checkForValidMillVersion)(workingDirectory)) {
-                throw 'Invalid mill version exception.';
-            }
+            yield (0, mill_1.checkForValidMillVersion)(workingDirectory);
             const millCommand = yield (0, mill_1.getMillPath)(workingDirectory);
             const pluginVersion = pluginVersionInput.length === 0
                 ? defaultMillPluginVersion
@@ -4077,18 +4075,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkForValidMillVersion = exports.getMillPath = void 0;
 const path = __importStar(__nccwpck_require__(17));
-const fs = __importStar(__nccwpck_require__(147));
+const promisified_1 = __nccwpck_require__(663);
 const exec = __importStar(__nccwpck_require__(514));
 const core = __importStar(__nccwpck_require__(186));
-const defaultMillVersion = '0.10.11';
+const defaultMillVersion = '0.11.1';
 function getMillPath(root) {
     return __awaiter(this, void 0, void 0, function* () {
         const millPath = path.join(root, 'mill');
         const millWPath = path.join(root, 'millw');
-        if (fs.existsSync(millPath)) {
+        if (yield (0, promisified_1.exists)(millPath)) {
             return './mill';
         }
-        else if (fs.existsSync(millWPath)) {
+        else if (yield (0, promisified_1.exists)(millWPath)) {
             return './millw';
         }
         else {
@@ -4105,50 +4103,100 @@ function getMillPath(root) {
     });
 }
 exports.getMillPath = getMillPath;
+/**
+ * Given a directory returns a promise which resolves to the Mill version declared in the
+ * project, or undefined if there is no declared version.
+ * The promise is rejected if the version is not supported or if any error happens.
+ */
 function checkForValidMillVersion(root) {
     return __awaiter(this, void 0, void 0, function* () {
         const millVersionFile = path.join(root, '.mill-version');
+        const configMillVersionFile = path.join(root, '.config', 'mill-version');
         const millFile = path.join(root, 'mill');
         const millwFile = path.join(root, 'millw');
-        if (fs.existsSync(millVersionFile)) {
-            const data = fs.readFileSync(millVersionFile, 'utf8');
-            return validateVersion(data);
+        if (yield (0, promisified_1.exists)(millVersionFile)) {
+            const data = yield (0, promisified_1.readFile)(millVersionFile, 'utf8');
+            return validatedVersion(data);
         }
-        else if (fs.existsSync(millFile)) {
-            return checkMillFile(millFile);
+        else if (yield (0, promisified_1.exists)(configMillVersionFile)) {
+            const data = yield (0, promisified_1.readFile)(configMillVersionFile, 'utf8');
+            return validatedVersion(data);
         }
-        else if (fs.existsSync(millwFile)) {
-            return checkMillFile(millwFile);
+        else if (yield (0, promisified_1.exists)(millFile)) {
+            return millFileVersion(millFile);
+        }
+        else if (yield (0, promisified_1.exists)(millwFile)) {
+            return millFileVersion(millwFile);
         }
         else {
             core.info(`No .mill-version or mill file found so defaulting to ${defaultMillVersion}`);
-            return true;
+            return undefined;
         }
     });
 }
 exports.checkForValidMillVersion = checkForValidMillVersion;
-function checkMillFile(millFile) {
-    const data = fs.readFileSync(millFile, 'utf8');
-    const lines = data.split('\n');
-    const versionLine = lines.find(line => line.startsWith('DEFAULT_MILL_VERSION'));
-    if (versionLine) {
-        const version = versionLine.substring(versionLine.indexOf('=') + 1, versionLine.length);
-        return validateVersion(version);
+function millFileVersion(millFile) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const data = yield (0, promisified_1.readFile)(millFile, 'utf8');
+        const lines = data.split('\n');
+        const versionLine = lines.find(line => line.startsWith('DEFAULT_MILL_VERSION'));
+        if (versionLine) {
+            const version = versionLine.substring(versionLine.indexOf('=') + 1, versionLine.length);
+            return validatedVersion(version);
+        }
+        else {
+            throw 'Invalid mill file found without a DEFAULT_MILL_VERSION';
+        }
+    });
+}
+function validatedVersion(version) {
+    const trimmedVersion = version.trim();
+    if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+        return trimmedVersion;
     }
     else {
-        core.error('Invalid mill file found without a DEFAULT_MILL_VERSION');
-        return false;
+        throw `Unsupported Mill version found: "${trimmedVersion}". Try updating to ${defaultMillVersion} and try again.`;
     }
 }
-function validateVersion(version) {
-    if (version.trim().startsWith('0.10')) {
-        return true;
+
+
+/***/ }),
+
+/***/ 663:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-    else {
-        core.error(`Unsupported Mill version found: "${version}". Try updating to ${defaultMillVersion} and try again.`);
-        return false;
-    }
-}
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.rm = exports.exists = exports.readFile = void 0;
+const fs = __importStar(__nccwpck_require__(147));
+const util_1 = __nccwpck_require__(837);
+exports.readFile = (0, util_1.promisify)(fs.readFile);
+exports.exists = (0, util_1.promisify)(fs.exists);
+exports.rm = (0, util_1.promisify)(fs.rm);
 
 
 /***/ }),
