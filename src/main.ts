@@ -16,9 +16,7 @@ async function run(): Promise<void> {
 
     const pluginVersionInput = core.getInput('plugin-version')
 
-    if (!checkForValidMillVersion(workingDirectory)) {
-      throw 'Invalid mill version exception.'
-    }
+    await checkForValidMillVersion(workingDirectory)
 
     const millCommand = await getMillPath(workingDirectory)
 
