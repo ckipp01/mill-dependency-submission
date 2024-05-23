@@ -2,7 +2,7 @@ import {checkForValidMillVersion, getMillPath} from '../src/mill'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
-const defaultMillPluginVersion = '0.2.6'
+const defaultMillPluginVersion = '0.2.7'
 
 async function run(): Promise<void> {
   try {
