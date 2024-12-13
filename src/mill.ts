@@ -76,7 +76,11 @@ async function millFileVersion(millFile: string): Promise<string> {
 
 function validatedVersion(version: String): string {
   const trimmedVersion = version.trim()
-  if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+  if (
+    trimmedVersion.startsWith('0.10') ||
+    trimmedVersion.startsWith('0.11') ||
+    trimmedVersion.startsWith('0.12')
+  ) {
     return trimmedVersion
   } else {
     throw `Unsupported Mill version found: "${trimmedVersion}". Try updating to ${defaultMillVersion} and try again.`

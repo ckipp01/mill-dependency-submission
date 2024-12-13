@@ -43,7 +43,7 @@ describe('mill', () => {
     const result = await checkForValidMillVersion(
       '__tests__/examples/mill-version'
     )
-    expect(result).toBe('0.10.5')
+    expect(result).toBe('0.12.3')
   })
 
   it('should be able to recognize a valid version from a .config/.mill-version file', async () => {

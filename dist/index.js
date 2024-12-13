@@ -4151,7 +4151,9 @@ function millFileVersion(millFile) {
 }
 function validatedVersion(version) {
     const trimmedVersion = version.trim();
-    if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+    if (trimmedVersion.startsWith('0.10') ||
+        trimmedVersion.startsWith('0.11') ||
+        trimmedVersion.startsWith('0.12')) {
         return trimmedVersion;
     }
     else {
