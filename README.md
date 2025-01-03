@@ -29,6 +29,10 @@ Create a workflow with the following:
 ```yml
 name: github-dependency-graph
 
+# The API requires write permission on the repository to submit dependencies
+permissions:
+  contents: write
+
 on:
   push:
     branches:
