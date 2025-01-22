@@ -4,7 +4,7 @@ import {exists, readFile} from './promisified'
 import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
-const defaultMillVersion = '0.11.1'
+const defaultMillVersion = '0.12.5'
 
 export async function getMillPath(root: string): Promise<'./mill' | './millw'> {
   const millPath = path.join(root, 'mill')
@@ -76,7 +76,11 @@ async function millFileVersion(millFile: string): Promise<string> {
 
 function validatedVersion(version: String): string {
   const trimmedVersion = version.trim()
-  if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+  if (
+    trimmedVersion.startsWith('0.10') ||
+    trimmedVersion.startsWith('0.11') ||
+    trimmedVersion.startsWith('0.12')
+  ) {
     return trimmedVersion
   } else {
     throw `Unsupported Mill version found: "${trimmedVersion}". Try updating to ${defaultMillVersion} and try again.`

@@ -4078,7 +4078,7 @@ const path = __importStar(__nccwpck_require__(928));
 const promisified_1 = __nccwpck_require__(462);
 const exec = __importStar(__nccwpck_require__(236));
 const core = __importStar(__nccwpck_require__(484));
-const defaultMillVersion = '0.11.1';
+const defaultMillVersion = '0.12.5';
 function getMillPath(root) {
     return __awaiter(this, void 0, void 0, function* () {
         const millPath = path.join(root, 'mill');
@@ -4151,7 +4151,9 @@ function millFileVersion(millFile) {
 }
 function validatedVersion(version) {
     const trimmedVersion = version.trim();
-    if (trimmedVersion.startsWith('0.10') || trimmedVersion.startsWith('0.11')) {
+    if (trimmedVersion.startsWith('0.10') ||
+        trimmedVersion.startsWith('0.11') ||
+        trimmedVersion.startsWith('0.12')) {
         return trimmedVersion;
     }
     else {
