@@ -58,7 +58,7 @@ describe('mill', () => {
       '__tests__/examples/old-version'
     )
     expect(resultPromise).rejects.toBe(
-      'Unsupported Mill version found: "0.9.0". Try updating to 0.11.1 and try again.'
+      'Unsupported Mill version found: "0.9.0". Try updating to 0.12.5 and try again.'
     )
   })
 
