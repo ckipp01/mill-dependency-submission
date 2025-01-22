@@ -1,7 +1,6 @@
 import {checkForValidMillVersion, getMillPath} from '../src/mill'
-import {exists, readFile, rm} from '../src/promisified'
-import {expect} from '@jest/globals'
-import * as fs from 'fs'
+import {exists, rm} from '../src/promisified'
+import {describe, expect, it, jest, afterAll} from '@jest/globals'
 import * as exec from '@actions/exec'
 
 describe('mill', () => {
